@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card p-4 shadow">
+            <div class="text-center mb-4">
+                <h1 class="display-4"><i class="fas fa-heartbeat text-danger me-2"></i>Heart Disease Prediction</h1>
+                <p class="lead">Using machine learning to identify heart disease risk factors</p>
+                <hr>
+            </div>
+            
+            <div class="row align-items-center mb-4">
+                <div class="col-md-6">
+                    <h2>What We Offer</h2>
+                    <p>Our heart disease prediction application utilizes machine learning to analyze your medical data and predict your risk of developing heart disease.</p>
+                    <ul class="list-group mb-4">
+                        <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i>Accurate risk prediction using machine learning</li>
+                        <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i>Personalized health insights</li>
+                        <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i>Secure and private data handling</li>
+                        <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i>User-friendly interface</li>
+                    </ul>
+                    <div class="d-grid gap-2 d-md-flex">
+                        {% if user.is_authenticated %}
+                        <a href="/dashboard/" class="btn btn-danger btn-lg me-md-2">Go to Dashboard</a>
+                        <a href="/predict/" class="btn btn-outline-secondary btn-lg">Make Prediction</a>
+                        {% else %}
+                        <a href="/register/" class="btn btn-danger btn-lg me-md-2">Get Started</a>
+                        <a href="/login/" class="btn btn-outline-secondary btn-lg">Sign In</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-6 text-center">
+                    <img src="https://cdn.pixabay.com/photo/2017/05/15/23/47/heart-2316450_1280.png" alt="Heart Image" class="img-fluid" style="max-height: 300px;">
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card h-100 bg-light">
+                        <div class="card-body text-center">
+                            <i class="fas fa-chart-line fa-3x text-primary mb-3"></i>
+                            <h4>Data-Driven</h4>
+                            <p>Our predictions are based on advanced machine learning models trained on medical data.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 bg-light">
+                        <div class="card-body text-center">
+                            <i class="fas fa-shield-alt fa-3x text-success mb-3"></i>
+                            <h4>Safe & Secure</h4>
+                            <p>Your health data is encrypted and stored securely with the highest privacy standards.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 bg-light">
+                        <div class="card-body text-center">
+                            <i class="fas fa-user-md fa-3x text-danger mb-3"></i>
+                            <h4>Health Insights</h4>
+                            <p>Get personalized insights about your heart health and risk factors.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-danger text-white text-center py-3">
+                <h3 class="mb-0"><i class="fas fa-user-plus me-2"></i>Register</h3>
+            </div>
+            <div class="card-body p-4">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+                
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    {% for field in form %}
+                    <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label">
+                            <i class="fas {% if field.name == 'username' %}fa-user{% elif field.name == 'email' %}fa-envelope{% elif 'password' in field.name %}fa-lock{% else %}fa-info-circle{% endif %} me-2"></i>
+                            {{ field.label }}:
+                        </label>
+                        {{ field.errors }}
+                        {{ field }}
+                        {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-danger btn-lg">Register</button>
+                    </div>
+                </form>
+                
+                <div class="text-center mt-3">
+                    <p>Already have an account? <a href="/login/" class="text-danger">Login here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Add Bootstrap classes to form fields
+    document.addEventListener('DOMContentLoaded', function() {
+        const formFields = document.querySelectorAll('form input, form select, form textarea');
+        formFields.forEach(field => {
+            field.classList.add('form-control');
+            if (field.type !== 'checkbox' && field.type !== 'radio') {
+                field.classList.add('form-control-lg');
+            }
+        });
+    });
+</script>
+{% endblock %}

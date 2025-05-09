@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block title %}Prediction{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h1 class="text-center mb-4">Heart Disease Prediction</h1>
+        <div class="card p-4 shadow">
+            <form method="POST">
+                {% csrf_token %}
+                <h4 class="mb-3">Personal Information</h4>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="age" class="form-label">Age:</label>
+                        <input type="number" id="age" name="age" class="form-control" required min="1" max="120">
+                    </div>
+                </div>
+
+                <h4 class="mb-3">Medical Measurements</h4>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="resting_bp" class="form-label">Resting Blood Pressure (mm Hg):</label>
+                        <small class="form-text text-muted d-block">Pressure when heart is at rest (normal: 90-120)</small>
+                        <input type="number" id="resting_bp" name="resting_bp" class="form-control" required min="50" max="250">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="cholestoral" class="form-label">Cholesterol (mg/dl):</label>
+                        <small class="form-text text-muted d-block">Blood cholesterol level (normal: below 200)</small>
+                        <input type="number" id="cholestoral" name="cholestoral" class="form-control" required min="100" max="600">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="max_heart_rate" class="form-label">Maximum Heart Rate:</label>
+                        <small class="form-text text-muted d-block">Highest heart rate achieved during exercise</small>
+                        <input type="number" id="max_heart_rate" name="max_heart_rate" class="form-control" required min="50" max="250">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="oldpeak" class="form-label">ST Depression (Oldpeak):</label>
+                        <small class="form-text text-muted d-block">ST depression induced by exercise relative to rest</small>
+                        <input type="number" id="oldpeak" name="oldpeak" class="form-control" step="0.1" required min="0" max="10">
+                    </div>
+                </div>
+
+                <h4 class="mb-3">Additional Medical Information</h4>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="fasting_blood_sugar" class="form-label">Fasting Blood Sugar:</label>
+                        <small class="form-text text-muted d-block">Blood sugar level after not eating for 8 hours</small>
+                        <select id="fasting_blood_sugar" name="fasting_blood_sugar" class="form-select" required>
+                            <option value="">Select...</option>
+                            <option value="1">Lower than 120 mg/ml</option>
+                            <option value="0">Greater than 120 mg/ml</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="rest_ecg" class="form-label">Resting ECG Results (Electrocardiogram):</label>
+                        <small class="form-text text-muted d-block">Heart electrical activity at rest</small>
+                        <select id="rest_ecg" name="rest_ecg" class="form-select" required>
+                            <option value="">Select...</option>
+                            <option value="normal">Normal</option>
+                            <option value="st-t">ST-T Wave Abnormality (abnormal heart beats)</option>
+                            <option value="other">Other (ventricular hypertrophy, etc.)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="exercise_angina" class="form-label">Exercise Induced Angina (Chest Pain):</label>
+                        <small class="form-text text-muted d-block">Chest pain caused by exercise</small>
+                        <select id="exercise_angina" name="exercise_angina" class="form-select" required>
+                            <option value="">Select...</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="slope" class="form-label">Slope of Peak Exercise ST Segment:</label>
+                        <small class="form-text text-muted d-block">Slope of ST segment during peak exercise</small>
+                        <select id="slope" name="slope" class="form-select" required>
+                            <option value="">Select...</option>
+                            <option value="upsloping">Upsloping (normal)</option>
+                            <option value="flat">Flat (abnormal)</option>
+                            <option value="downsloping">Downsloping (very abnormal)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="vessels_colored" class="form-label">Number of Major Vessels Colored by Fluoroscopy:</label>
+                        <small class="form-text text-muted d-block">Blood vessels highlighted in X-ray (fewer is better)</small>
+                        <select id="vessels_colored" name="vessels_colored" class="form-select" required>
+                            <option value="">Select...</option>
+                            <option value="zero">Zero (best)</option>
+                            <option value="one">One</option>
+                            <option value="two">Two</option>
+                            <option value="three">Three (worst)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="thalassemia" class="form-label">Thalassemia (Blood Disorder):</label>
+                        <small class="form-text text-muted d-block">Hereditary blood disorder affecting oxygen transport</small>
+                        <select id="thalassemia" name="thalassemia" class="form-select" required>
+                            <option value="">Select...</option>
+                            <option value="normal">Normal</option>
+                            <option value="fixed_defect">Fixed Defect (permanent heart damage)</option>
+                            <option value="reversable_defect">Reversable Defect (temporary blood flow issue)</option>
+                            <option value="no">No Thalassemia</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="btn btn-danger btn-lg">Predict Heart Disease Risk</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

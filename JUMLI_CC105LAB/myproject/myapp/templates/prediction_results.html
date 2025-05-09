@@ -1,0 +1,305 @@
+{% extends 'base.html' %}
+
+{% block title %}Prediction Results{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h1 class="text-center mb-4">Heart Disease Prediction Results</h1>
+        
+        <!-- Prediction Result Card -->
+        <div class="card shadow mb-4">
+            <div class="card-header {% if prediction == 1 %}bg-danger{% else %}bg-success{% endif %} text-white py-3">
+                <h3 class="mb-0 text-center">
+                    {% if prediction == 1 %}
+                    <i class="fas fa-exclamation-triangle me-2"></i>High Risk of Heart Disease
+                    {% else %}
+                    <i class="fas fa-check-circle me-2"></i>Low Risk of Heart Disease
+                    {% endif %}
+                </h3>
+            </div>
+            <div class="card-body p-4">
+                <div class="row justify-content-center mb-4">
+                    <div class="col-md-8">
+                        <div class="progress" style="height: 30px;">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: {{ negative_percentage }}%" 
+                                aria-valuenow="{{ negative_percentage }}" aria-valuemin="0" aria-valuemax="100">
+                                {{ negative_percentage }}%
+                            </div>
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: {{ positive_percentage }}%" 
+                                aria-valuenow="{{ positive_percentage }}" aria-valuemin="0" aria-valuemax="100">
+                                {{ positive_percentage }}%
+                            </div>
+                        </div>
+                        <div class="row text-center mt-2">
+                            <div class="col-6 text-success">
+                                <strong>No Heart Disease: {{ negative_percentage }}%</strong>
+                            </div>
+                            <div class="col-6 text-danger">
+                                <strong>Heart Disease: {{ positive_percentage }}%</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mb-4">
+                    {% if prediction == 1 %}
+                    <div class="alert alert-danger">
+                        <p class="mb-0">The model predicts a <strong>{{ positive_percentage }}%</strong> probability of heart disease.</p>
+                        <p>Please consult with a healthcare professional for further evaluation.</p>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-success">
+                        <p class="mb-0">The model predicts a <strong>{{ negative_percentage }}%</strong> probability of no heart disease.</p>
+                        <p>Continue maintaining a healthy lifestyle to reduce risk factors.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- User Inputs Card -->
+        <div class="card shadow mb-4">
+            <div class="card-header bg-secondary text-white">
+                <h4 class="mb-0"><i class="fas fa-clipboard-list me-2"></i>Your Inputs</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr>
+                                    <th>Age</th>
+                                    <td>{{ user_inputs.age }} years</td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        Resting Blood Pressure
+                                        <small class="text-muted d-block">Pressure when heart is at rest</small>
+                                    </th>
+                                    <td>
+                                        {{ user_inputs.resting_bp }} mm Hg
+                                        {% if user_inputs.resting_bp < 90 %}
+                                        <span class="badge bg-info">Low</span>
+                                        {% elif user_inputs.resting_bp < 120 %}
+                                        <span class="badge bg-success">Normal</span>
+                                        {% elif user_inputs.resting_bp < 140 %}
+                                        <span class="badge bg-warning">Elevated</span>
+                                        {% else %}
+                                        <span class="badge bg-danger">High</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        Cholesterol
+                                        <small class="text-muted d-block">Blood cholesterol level</small>
+                                    </th>
+                                    <td>
+                                        {{ user_inputs.cholestoral }} mg/dl
+                                        {% if user_inputs.cholestoral < 200 %}
+                                        <span class="badge bg-success">Desirable</span>
+                                        {% elif user_inputs.cholestoral < 240 %}
+                                        <span class="badge bg-warning">Borderline</span>
+                                        {% else %}
+                                        <span class="badge bg-danger">High</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        Maximum Heart Rate
+                                        <small class="text-muted d-block">Highest rate during exercise</small>
+                                    </th>
+                                    <td>{{ user_inputs.max_heart_rate }} bpm</td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        ST Depression (Oldpeak)
+                                        <small class="text-muted d-block">Exercise-induced ECG change</small>
+                                    </th>
+                                    <td>
+                                        {{ user_inputs.oldpeak }}
+                                        {% if user_inputs.oldpeak > 2 %}
+                                        <span class="badge bg-danger">Significant</span>
+                                        {% elif user_inputs.oldpeak > 0.5 %}
+                                        <span class="badge bg-warning">Moderate</span>
+                                        {% else %}
+                                        <span class="badge bg-success">Minimal</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr>
+                                    <th>
+                                        Fasting Blood Sugar
+                                        <small class="text-muted d-block">Blood sugar after not eating</small>
+                                    </th>
+                                    <td>
+                                        {{ user_inputs.fasting_blood_sugar }}
+                                        {% if user_inputs.fasting_blood_sugar == 'Greater than 120 mg/ml' %}
+                                        <span class="badge bg-warning">Elevated</span>
+                                        {% else %}
+                                        <span class="badge bg-success">Normal</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        Resting ECG
+                                        <small class="text-muted d-block">Heart electrical activity</small>
+                                    </th>
+                                    <td>
+                                        {{ user_inputs.rest_ecg }}
+                                        {% if user_inputs.rest_ecg == 'Normal' %}
+                                        <span class="badge bg-success">Normal</span>
+                                        {% else %}
+                                        <span class="badge bg-warning">Abnormal</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        Exercise Angina
+                                        <small class="text-muted d-block">Chest pain during exercise</small>
+                                    </th>
+                                    <td>
+                                        {{ user_inputs.exercise_angina }}
+                                        {% if user_inputs.exercise_angina == 'Yes' %}
+                                        <span class="badge bg-danger">Present</span>
+                                        {% else %}
+                                        <span class="badge bg-success">Absent</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        Slope of ST Segment
+                                        <small class="text-muted d-block">ECG pattern during exercise</small>
+                                    </th>
+                                    <td>
+                                        {{ user_inputs.slope }}
+                                        {% if user_inputs.slope == 'Upsloping' %}
+                                        <span class="badge bg-success">Normal</span>
+                                        {% elif user_inputs.slope == 'Flat' %}
+                                        <span class="badge bg-warning">Abnormal</span>
+                                        {% else %}
+                                        <span class="badge bg-danger">Very Abnormal</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        Vessels Colored
+                                        <small class="text-muted d-block">Vessels highlighted in X-ray</small>
+                                    </th>
+                                    <td>
+                                        {{ user_inputs.vessels_colored }}
+                                        {% if user_inputs.vessels_colored == 'Zero' %}
+                                        <span class="badge bg-success">Excellent</span>
+                                        {% elif user_inputs.vessels_colored == 'One' %}
+                                        <span class="badge bg-warning">Concerning</span>
+                                        {% else %}
+                                        <span class="badge bg-danger">Problematic</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        Thalassemia
+                                        <small class="text-muted d-block">Blood disorder</small>
+                                    </th>
+                                    <td>
+                                        {{ user_inputs.thalassemia }}
+                                        {% if user_inputs.thalassemia == 'Normal' or user_inputs.thalassemia == 'No thalassemia' %}
+                                        <span class="badge bg-success">Normal</span>
+                                        {% else %}
+                                        <span class="badge bg-warning">Abnormal</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Risk Factors Explanation -->
+        {% if prediction == 1 %}
+        <div class="card shadow mb-4">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0"><i class="fas fa-exclamation-circle me-2"></i>Risk Factors Detected</h4>
+            </div>
+            <div class="card-body">
+                <p class="mb-3">The following risk factors contribute to your heart disease probability:</p>
+                <ul class="list-group">
+                    {% if user_inputs.age > 60 %}
+                    <li class="list-group-item list-group-item-warning">
+                        <i class="fas fa-user-clock me-2"></i><strong>Age ({{ user_inputs.age }} years):</strong> Risk increases with age, particularly over 60.
+                    </li>
+                    {% endif %}
+                    
+                    {% if user_inputs.resting_bp > 140 %}
+                    <li class="list-group-item list-group-item-warning">
+                        <i class="fas fa-heartbeat me-2"></i><strong>Blood Pressure ({{ user_inputs.resting_bp }} mm Hg):</strong> Elevated blood pressure increases strain on the heart.
+                    </li>
+                    {% endif %}
+                    
+                    {% if user_inputs.cholestoral > 240 %}
+                    <li class="list-group-item list-group-item-warning">
+                        <i class="fas fa-vial me-2"></i><strong>Cholesterol ({{ user_inputs.cholestoral }} mg/dl):</strong> High cholesterol contributes to arterial plaque formation.
+                    </li>
+                    {% endif %}
+                    
+                    {% if user_inputs.max_heart_rate < 130 %}
+                    <li class="list-group-item list-group-item-warning">
+                        <i class="fas fa-chart-line me-2"></i><strong>Maximum Heart Rate ({{ user_inputs.max_heart_rate }} bpm):</strong> Lower maximum heart rate can indicate decreased heart function.
+                    </li>
+                    {% endif %}
+                    
+                    {% if user_inputs.oldpeak > 1.0 %}
+                    <li class="list-group-item list-group-item-warning">
+                        <i class="fas fa-heartbeat me-2"></i><strong>ST Depression ({{ user_inputs.oldpeak }}):</strong> Higher values indicate abnormal heart activity during exercise.
+                    </li>
+                    {% endif %}
+                    
+                    {% if user_inputs.fasting_blood_sugar == 'Greater than 120 mg/ml' %}
+                    <li class="list-group-item list-group-item-warning">
+                        <i class="fas fa-tint me-2"></i><strong>Fasting Blood Sugar (High):</strong> Elevated blood sugar levels indicate potential diabetes, a risk factor for heart disease.
+                    </li>
+                    {% endif %}
+                    
+                    {% if user_inputs.exercise_angina == 'Yes' %}
+                    <li class="list-group-item list-group-item-warning">
+                        <i class="fas fa-running me-2"></i><strong>Exercise Induced Angina (Chest Pain):</strong> Chest pain during exercise is a strong indicator of coronary artery disease.
+                    </li>
+                    {% endif %}
+                    
+                    {% if user_inputs.vessels_colored != 'Zero' %}
+                    <li class="list-group-item list-group-item-warning">
+                        <i class="fas fa-x-ray me-2"></i><strong>Vessels Colored ({{ user_inputs.vessels_colored }}):</strong> More colored vessels indicate greater coronary artery blockage.
+                    </li>
+                    {% endif %}
+                </ul>
+                
+                <div class="alert alert-info mt-3">
+                    <i class="fas fa-info-circle me-2"></i> <strong>Note:</strong> This prediction is for informational purposes only and should not replace professional medical advice. Please consult with a healthcare provider for proper diagnosis and treatment.
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Action Buttons -->
+        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+            <a href="/predict/" class="btn btn-primary btn-lg"><i class="fas fa-redo me-2"></i>Make Another Prediction</a>
+            <a href="/dashboard/" class="btn btn-outline-secondary btn-lg"><i class="fas fa-chart-line me-2"></i>View Dashboard</a>
+        </div>
+    </div>
+</div>
+{% endblock %} 
